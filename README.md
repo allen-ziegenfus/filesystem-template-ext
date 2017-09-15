@@ -19,4 +19,12 @@ template.directory - this is the base path of where the code will look for files
 
 218983270=/6.2.x/templates/events/event_sessions.ftl
 
+Finally change these portal properties to get the ext working: 
+
+freemarker.engine.template.parsers - replace com.liferay.portal.template.DDMTemplateResourceParser with  com.liferay.filesystem.template.FileSystemTemplateResourceParser
+
+journal.transformer.listener - add com.liferay.filesystem.template.FileSystemTemplateTransformerListener as the first transformer
+
+
+
 
