@@ -15,7 +15,7 @@ Then create the properties file and add some entries. There is one entry for the
 
 template.directory - this is the base path of where the code will look for files
 
-<templateKey> - pathname of a particular template file, e.g.: 
+(templateKey) - pathname of a particular template file, e.g.: 
 
 218983270=/6.2.x/templates/events/event_sessions.ftl
 
