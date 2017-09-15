@@ -13,8 +13,9 @@ https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/docroot/W
 Then create the properties file and add some entries. There is one entry for the template directory path and the rest are for individual template files
 
 
-#. template.directory - this is the base path of where the code will look for files
-#. <templateKey> - pathname of a particular template file, e.g.: 
+template.directory - this is the base path of where the code will look for files
+
+<templateKey> - pathname of a particular template file, e.g.: 
 
 218983270=/6.2.x/templates/events/event_sessions.ftl
 
