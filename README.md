@@ -6,3 +6,16 @@ Instead of having to update templates in the Liferay UI this ext modifies code s
 
 # How to set up
 
+To get this working we have map templateKeys to files so that the code knows where to look. First configure this properties file in the ext with the path of your custom configuration file:
+
+https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/docroot/WEB-INF/ext-impl/src/template.properties
+
+Then create the properties file and add some entries. There is one entry for the template directory path and the rest are for individual template files
+
+
+#. template.directory - this is the base path of where the code will look for files
+#. <templateKey> - pathname of a particular template file, e.g.: 
+
+218983270=/6.2.x/templates/events/event_sessions.ftl
+
+
