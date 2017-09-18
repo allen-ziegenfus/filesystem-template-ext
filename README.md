@@ -19,6 +19,8 @@ template.directory - this is the base path of where the code will look for files
 
 218983270=/6.2.x/templates/events/event_sessions.ftl
 
+Here is a sample tempalte config file: https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/template.properties
+
 To get the appropriate templateKeys you can either look through the portal / db or you can also set some logging which will spit out a message if this ext *DOES NOT* find a match: 
 
 	<logger name="com.liferay.filesystem.template">
@@ -29,13 +31,13 @@ Then you'll get messages in your log file like this:
 
 For a Journal Article:
 
-13:14:45,228 INFO  [RuntimePageImpl-16][FileSystemTemplateTransformerListener:84] Could not find template for template key: 18611 Be a leader in your industry - /home
+12:42:09,148 INFO  [RuntimePageImpl-14][FileSystemTemplateTransformerListener:75] Could not find template for template key: 203515550 Article: Countdown Timer LDSF
 
 So here you can add a new entry for 18611
 
 For an imported template
 
-13:14:45,321 INFO  [RuntimePageImpl-16][FileSystemTemplateResourceParser:114] Could not find template for template key: _TEMPLATE_CONTEXT_/10155/10182/10102/898140
+12:37:16,622 INFO  [RuntimePageImpl-5][FileSystemTemplateResourceParser:62] Could not find template for template key: 898140
 
 Here you would add the missing entry for 898140
 
@@ -44,6 +46,13 @@ Finally change these portal properties to get the ext working:
 freemarker.engine.template.parsers - replace com.liferay.portal.template.DDMTemplateResourceParser with  com.liferay.filesystem.template.FileSystemTemplateResourceParser
 
 journal.transformer.listener - add com.liferay.filesystem.template.FileSystemTemplateTransformerListener as the first transformer
+
+```
+freemarker.engine.template.parsers=com.liferay.portal.freemarker.FreeMarkerServletResourceParser,com.liferay.portal.template.ThemeResourceParser,com.liferay.filesystem.template.FileSystemTemplateResourceParser,com.liferay.portal.template.ClassLoaderResourceParser
+
+
+journal.transformer.listener=com.liferay.filesystem.template.FileSystemTemplateTransformerListener,com.liferay.portlet.journal.util.TokensTransformerListener,com.liferay.portlet.journal.util.ContentTransformerListener,com.liferay.portlet.journal.util.LocaleTransformerListener,com.liferay.portlet.journal.util.RegexTransformerListener,com.liferay.portlet.journal.util.ViewCounterTransformerListener
+```
 
 
 
