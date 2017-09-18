@@ -2,11 +2,11 @@
 
 This is a simple ext project to help speed up local template development in Liferay. This currently works with DDMTemplates. 
 
-Instead of having to update templates in the Liferay UI this ext modifies code so that the portal will directly look at the fileystem instead. This way as soon as you save any template changes in a text editor of your choice, the portal will reflect those changes. 
+Instead of having to update templates in the Liferay UI this ext modifies code so that the portal will directly look at the fileystem instead. This way as soon as you save any template changes in a text editor of your choice, the portal will reflect those changes. In combination with a git repository this means you can easily switch your portal between different branches of templates. Yay!
 
 # How to set up
 
-To get this working we have map templateKeys to files so that the code knows where to look. There are two configuration files: one built with the ext that has the location of the template configuration file and the template configuration file. 
+To get this working we have to map templateKeys to files so that the ext knows where to look for the code. There are two configuration files: one built with the ext that has the location of the template configuration file and the template configuration file. 
 
 ## Config properties configuration file 
  First configure this properties file in the ext with the path of your custom configuration file:
