@@ -19,10 +19,10 @@ template.directory - this is the base path of where the code will look for files
 (templateKey) - pathname of a particular template file, e.g.: 
 
 ```
-	218983270=/6.2.x/templates/events/event_sessions.ftl
+218983270=/6.2.x/templates/events/event_sessions.ftl
 ```
 
-Here is a sample tempalte config file: https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/template.properties
+Here is a sample template config file: https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/template.properties
 
 To get the appropriate templateKeys you can either look through the portal / db or you can also set some logging which will spit out a message if this ext *DOES NOT* find a match: 
 
@@ -38,7 +38,7 @@ Then you'll get messages in your log file like this:
 12:42:09,148 INFO  [RuntimePageImpl-14][FileSystemTemplateTransformerListener:75] Could not find template for template key: 203515550 Article: Countdown Timer LDSF
 ```
 
-So here you can add a new entry for 18611
+So here you can add a new entry for 203515550
 
 ### For an imported template
 ```
