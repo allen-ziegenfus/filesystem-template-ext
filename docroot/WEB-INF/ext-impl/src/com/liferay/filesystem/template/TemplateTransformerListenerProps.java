@@ -16,11 +16,11 @@ package com.liferay.filesystem.template;
 
 import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
-import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+
 import java.util.Properties;
 
 /**
@@ -32,27 +32,32 @@ public class TemplateTransformerListenerProps {
 		return loadProps().getProperty(key);
 	}
 
-	private static Properties loadProps() {
-		Properties properties = new Properties();
-		
-		FileReader reader;
-		try {
-			reader = new FileReader(getPropertiesFileName());
-	
-			properties.load(reader);
-			reader.close();
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-		return properties;
-	}
-	
 	private static String getPropertiesFileName() {
 		Configuration configuration = ConfigurationFactoryUtil.getConfiguration(
-			TemplateTransformerListenerProps.class.getClassLoader(), "template");
-		
+			TemplateTransformerListenerProps.class.getClassLoader(),
+			"template");
+
 		return configuration.get("template.properties.file");
 	}
-	
+
+	private static Properties loadProps() {
+		Properties properties = new Properties();
+
+		try {
+			FileReader reader = new FileReader(getPropertiesFileName());
+
+			properties.load(reader);
+
+			reader.close();
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return properties;
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		TemplateTransformerListenerProps.class);
+
 }

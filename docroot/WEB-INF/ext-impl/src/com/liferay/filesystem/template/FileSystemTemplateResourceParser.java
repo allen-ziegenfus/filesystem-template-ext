@@ -1,5 +1,5 @@
 /**
-== * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,124 +16,66 @@ package com.liferay.filesystem.template;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.template.DDMTemplateResource;
-import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.template.DDMTemplateResourceParser;
 import com.liferay.portal.template.TemplateResourceParser;
-import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
-import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
-import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
 
-public class FileSystemTemplateResourceParser 
+/**
+ * @author Allen Ziegenfus
+ */
+public class FileSystemTemplateResourceParser extends DDMTemplateResourceParser
 	implements TemplateResourceParser {
 
 	public TemplateResource getTemplateResource(String templateId)
 		throws TemplateException {
-		
-		_log.info("Looking for " + templateId);
 
-		int pos = templateId.indexOf(
-			TemplateConstants.TEMPLATE_SEPARATOR + StringPool.SLASH);
+		TemplateResource templateResource = super.getTemplateResource(
+			templateId);
 
-		if (pos == -1) {
-
-			// Backwards compatibility
-
-			pos = templateId.indexOf(
-				TemplateConstants.JOURNAL_SEPARATOR + StringPool.SLASH);
-
-			if (pos == -1) {
-				return null;
-			}
+		if (templateResource == null) {
+			return null;
 		}
+		else {
+			try {
+				String directory = TemplateTransformerListenerProps.get(
+					"template.directory");
 
-		try {
-			int w = templateId.indexOf(CharPool.SLASH, pos);
-			int x = templateId.indexOf(CharPool.SLASH, w + 1);
-			int y = templateId.indexOf(CharPool.SLASH, x + 1);
-			int z = templateId.indexOf(CharPool.SLASH, y + 1);
+				String templateFileName =
+					TemplateTransformerListenerProps.get(
+						templateResource.getTemplateId());
 
-			long companyId = GetterUtil.getLong(templateId.substring(w + 1, x));
-			long groupId = GetterUtil.getLong(templateId.substring(x + 1, y));
-			long classNameId = GetterUtil.getLong(
-				templateId.substring(y + 1, z));
-			String ddmTemplateKey = templateId.substring(z + 1);
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Loading {companyId=" + companyId + ", groupId=" +
-						groupId + ", classNameId=" + classNameId +
-							", ddmTemplateKey=" + ddmTemplateKey + "}");
-			}
-			
-
-			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
-				groupId, classNameId, ddmTemplateKey);
-
-			if (ddmTemplate == null) {
-				Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
-					companyId);
-
-				ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
-					companyGroup.getGroupId(), classNameId, ddmTemplateKey);
-
-				if (ddmTemplate == null) {
-					classNameId = PortalUtil.getClassNameId(DDMStructure.class);
-
-					ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
-						groupId, classNameId, ddmTemplateKey);
-				}
-
-				if (ddmTemplate == null) {
-					ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
-						companyGroup.getGroupId(), classNameId, ddmTemplateKey);
-				}
-			}
-
-			if (ddmTemplate == null) {
-				return null;
-			}
-			else {
-				String directory = TemplateTransformerListenerProps.get("template.directory");
-				String templateFileName = TemplateTransformerListenerProps.get(ddmTemplateKey);
-					
 				String s = FileUtil.read(directory + templateFileName);
-			
+
 				if (s != null) {
-					ddmTemplate.setScript(s);
-				} 
-				else {
-					_log.info("Could not find template for template key: " + templateId);
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Serving templateKey: " +
+							templateResource.getTemplateId() + " from " +
+								directory + templateFileName
+						);
+					}
+
+					return new StringTemplateResource(
+						templateResource.getTemplateId(), s);
 				}
-				
-				return new DDMTemplateResource(
-					ddmTemplate.getTemplateKey(), ddmTemplate);
+				else {
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Could not find template for template key: " +
+							templateResource.getTemplateId()
+						);
+					}
+				}
+			}
+			catch (Exception e) {
+				_log.error(e);
 			}
 		}
-		catch (Exception e) {
-			throw new TemplateException(
-				"Unable to find template " + templateId, e);
-		}
-	}
 
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isTemplateResourceValid(String templateId, String langType) {
-		if (templateId.contains(TemplateConstants.JOURNAL_SEPARATOR) ||
-			templateId.contains(TemplateConstants.TEMPLATE_SEPARATOR)) {
-
-			return true;
-		}
-
-		return false;
+		return templateResource;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
