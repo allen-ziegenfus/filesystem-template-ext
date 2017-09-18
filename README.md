@@ -6,13 +6,15 @@ Instead of having to update templates in the Liferay UI this ext modifies code s
 
 # How to set up
 
+To get this working we have map templateKeys to files so that the code knows where to look. There are two configuration files: one built with the ext that has the location of the template configuration file and the template configuration file. 
+
 ## Config properties configuration file 
-To get this working we have map templateKeys to files so that the code knows where to look. First configure this properties file in the ext with the path of your custom configuration file:
+ First configure this properties file in the ext with the path of your custom configuration file:
 
 https://github.com/allen-ziegenfus/filesystem-template-ext/blob/master/docroot/WEB-INF/ext-impl/src/template.properties
 
 ## Configure template properties file
-Then create the properties file and add some entries. There is one entry for the template directory path and the rest are for individual template files
+Then create the template properties file and add some entries. There is one entry for the template directory path and the rest are for the individual template files, as follows:
 
 template.directory - this is the base path of where the code will look for files
 
@@ -46,6 +48,10 @@ So here you can add a new entry for 203515550
 ```
 Here you would add the missing entry for 898140
 
+## Build and deploy your ext
+```
+ant direct-deploy
+```
 ## Portal properties 
 Finally change these portal properties to get the ext working: 
 
