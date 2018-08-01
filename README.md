@@ -1,6 +1,7 @@
 # filesystem-template-ext
 
-This is a simple ext project to help speed up local template development in Liferay. This currently works with DDMTemplates. 
+This is a simple ext project to help speed up local template development in Liferay. This currently works with DDMTemplates and classloaded templates (e.g. templates loaded through ```
+freemarker.engine.macro.library```). 
 
 Instead of having to update templates in the Liferay UI this ext modifies code so that the portal will directly look at the fileystem instead. This way as soon as you save any template changes in a text editor of your choice, the portal will reflect those changes. In combination with a git repository this means you can easily switch your portal between different branches of templates. Yay!
 
@@ -75,7 +76,7 @@ journal.transformer.listener=com.liferay.filesystem.template.FileSystemTemplateT
 
 # Running in Docker
 
-To use an ext plugin in Liferay, you first have to deploy and then restart Liferay (e.g. tomcat). Because this restart is necessary, in a Docker context, it is critical to use a volume for the tomcat directory, so that it retains state. A volume can be defined in docker-composer.yaml by adding a line in the service definition and to the list of volumes as follows
+To use an ext plugin in Liferay, you first have to deploy and then restart Liferay (e.g. tomcat). Because this restart is necessary, in a Docker context, it is critical to use a volume for the tomcat directory, so that it retains state. A volume can be defined in docker-composer.yaml by adding a line in the service definition and to the list of volumes as follows:
 
 ## Volume Setting in the service definition 
 ```
